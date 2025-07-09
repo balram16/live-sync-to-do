@@ -14,13 +14,22 @@ export const AuthProvider = ({ children }) => {
         return;
       }
       try {
+        console.log('Fetching user data with token...');
         const res = await fetch(`${import.meta.env.VITE_API_URL}/api/auth/me`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         const data = await res.json();
-        if (!res.ok) throw new Error();
+        if (!res.ok) {
+          console.log('Token validation failed, clearing token');
+          setToken(null);
+          setUser(null);
+          return;
+        }
+        console.log('User data fetched successfully:', data);
         setUser(data);
-      } catch {
+      } catch (error) {
+        console.error('Error fetching user data:', error);
+        setToken(null);
         setUser(null);
       }
     };
