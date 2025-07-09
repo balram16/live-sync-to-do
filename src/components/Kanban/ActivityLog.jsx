@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { io } from 'socket.io-client';
 
-const SOCKET_URL = 'http://localhost:5000';
+const SOCKET_URL = '${import.meta.env.VITE_API_URL}';
 
 const actionLabels = {
   add: 'added',
@@ -20,7 +20,7 @@ const ActivityLog = ({ token }) => {
 
   useEffect(() => {
     const fetchActions = async () => {
-      const res = await fetch('http://localhost:5000/api/tasks/actions', {
+      const res = await fetch('${import.meta.env.VITE_API_URL}/api/tasks/actions', {
         headers: { Authorization: `Bearer ${token}` },
       });
       const data = await res.json();

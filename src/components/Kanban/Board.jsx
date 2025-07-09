@@ -19,7 +19,7 @@ const columnDefs = [
   { id: 'done', name: 'Done', status: 'Done' },
 ];
 
-const SOCKET_URL = 'http://localhost:5000';
+const SOCKET_URL = '${import.meta.env.VITE_API_URL}';
 
 const Board = ({ theme, toggleTheme }) => {
   const { logout, token, user } = useAuth();
@@ -133,7 +133,7 @@ const Board = ({ theme, toggleTheme }) => {
     setError('');
     try {
       const col = columns.find(c => c.id === colId);
-      const res = await fetch('http://localhost:5000/api/tasks', {
+      const res = await fetch('${import.meta.env.VITE_API_URL}/api/tasks', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -179,7 +179,7 @@ const Board = ({ theme, toggleTheme }) => {
     try {
       const col = columns.find(c => c.id === colId);
       const card = col.cards.find(card => card._id === cardId || card.id === cardId);
-      const res = await fetch(`http://localhost:5000/api/tasks/${cardId}`, {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/tasks/${cardId}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -214,7 +214,7 @@ const Board = ({ theme, toggleTheme }) => {
     if (!conflict) return;
     try {
       const { client, cardId, colId } = conflict;
-      const res = await fetch(`http://localhost:5000/api/tasks/${cardId}`, {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/tasks/${cardId}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -244,7 +244,7 @@ const Board = ({ theme, toggleTheme }) => {
       version: conflict.server.version,
     };
     try {
-      const res = await fetch(`http://localhost:5000/api/tasks/${conflict.cardId}`, {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/tasks/${conflict.cardId}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -268,7 +268,7 @@ const Board = ({ theme, toggleTheme }) => {
   const handleDeleteCard = async (colId, cardId) => {
     setError('');
     try {
-      const res = await fetch(`http://localhost:5000/api/tasks/${cardId}`, {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/tasks/${cardId}`, {
         method: 'DELETE',
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -286,7 +286,7 @@ const Board = ({ theme, toggleTheme }) => {
   const handleSmartAssign = async (cardId, colId) => {
     setError('');
     try {
-      const res = await fetch(`http://localhost:5000/api/tasks/${cardId}/smart-assign`, {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/tasks/${cardId}/smart-assign`, {
         method: 'POST',
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -316,7 +316,7 @@ const Board = ({ theme, toggleTheme }) => {
         }
       }
       if (!card) return;
-      const res = await fetch(`http://localhost:5000/api/tasks/${cardId}`, {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/tasks/${cardId}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -399,7 +399,7 @@ const Board = ({ theme, toggleTheme }) => {
     // If status changed, update backend
     if (sourceCol.status !== destCol.status) {
       try {
-        await fetch(`http://localhost:5000/api/tasks/${movedCard._id || movedCard.id}`, {
+        await fetch(`${import.meta.env.VITE_API_URL}/api/tasks/${movedCard._id || movedCard.id}`, {
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json',
@@ -417,7 +417,7 @@ const Board = ({ theme, toggleTheme }) => {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const res = await fetch('http://localhost:5000/api/auth/users', {
+        const res = await fetch('${import.meta.env.VITE_API_URL}/api/auth/users', {
           headers: { Authorization: `Bearer ${token}` },
         });
         const data = await res.json();
@@ -433,7 +433,7 @@ const Board = ({ theme, toggleTheme }) => {
       setLoading(true);
       setError('');
       try {
-        const res = await fetch('http://localhost:5000/api/tasks', {
+        const res = await fetch('${import.meta.env.VITE_API_URL}/api/tasks', {
           headers: { Authorization: `Bearer ${token}` },
         });
         const data = await res.json();
@@ -465,7 +465,7 @@ const Board = ({ theme, toggleTheme }) => {
         if (card) { colId = c.id; break; }
       }
       if (!card) return;
-      const res = await fetch(`http://localhost:5000/api/tasks/${taskId}`, {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/tasks/${taskId}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -493,7 +493,7 @@ const Board = ({ theme, toggleTheme }) => {
     const doneCol = columns.find(c => c.status === 'Done');
     if (!doneCol) return;
     try {
-      const res = await fetch(`http://localhost:5000/api/tasks/${card._id || card.id}`, {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/tasks/${card._id || card.id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -620,7 +620,7 @@ const Board = ({ theme, toggleTheme }) => {
           // If status changed, update backend
           if (sourceCol.status !== destCol.status) {
             try {
-              await fetch(`http://localhost:5000/api/tasks/${movedCard._id || movedCard.id}`, {
+              await fetch(`${import.meta.env.VITE_API_URL}/api/tasks/${movedCard._id || movedCard.id}`, {
                 method: 'PUT',
                 headers: {
                   'Content-Type': 'application/json',
@@ -633,7 +633,7 @@ const Board = ({ theme, toggleTheme }) => {
             }
           }
           // After drag ends, re-fetch tasks to re-sync
-          const res = await fetch('http://localhost:5000/api/tasks', {
+          const res = await fetch('${import.meta.env.VITE_API_URL}/api/tasks', {
             headers: { Authorization: `Bearer ${token}` },
           });
           const data = await res.json();
