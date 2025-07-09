@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import Register from '../components/Auth/Register';
 import { useNavigate, Link } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 
 const RegisterPage = () => {
   const navigate = useNavigate();
+  const { login } = useAuth();
   const [loading, setLoading] = useState(false);
   const handleRegister = async (data) => {
     setLoading(true);
@@ -15,7 +17,7 @@ const RegisterPage = () => {
       });
       const result = await res.json();
       if (!res.ok) throw new Error(result.message || 'Registration failed');
-      localStorage.setItem('token', result.token);
+      login(result.token, result.user);
       navigate('/board');
     } catch (err) {
       alert(err.message);

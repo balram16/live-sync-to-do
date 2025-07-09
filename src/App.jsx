@@ -3,7 +3,20 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import BoardPage from './pages/BoardPage';
-import { AuthProvider } from './context/AuthContext';
+import { AuthProvider, useAuth } from './context/AuthContext';
+
+function AppRoutes({ theme, toggleTheme }) {
+  const { token } = useAuth();
+  
+  return (
+    <Routes>
+      <Route path="/login" element={token ? <Navigate to="/board" replace /> : <LoginPage />} />
+      <Route path="/register" element={token ? <Navigate to="/board" replace /> : <RegisterPage />} />
+      <Route path="/board" element={<BoardPage theme={theme} toggleTheme={toggleTheme} />} />
+      <Route path="*" element={<Navigate to={token ? "/board" : "/login"} replace />} />
+    </Routes>
+  );
+}
 
 function App() {
   const [theme, setTheme] = useState(() => localStorage.getItem('theme') || 'dark');
@@ -18,12 +31,7 @@ function App() {
     <div className={`theme-${theme}`}>
       <AuthProvider>
         <Router>
-          <Routes>
-            <Route path="/login" element={<LoginPage />} />
-            <Route path="/register" element={<RegisterPage />} />
-            <Route path="/board" element={<BoardPage theme={theme} toggleTheme={toggleTheme} />} />
-            <Route path="*" element={<Navigate to="/login" />} />
-          </Routes>
+          <AppRoutes theme={theme} toggleTheme={toggleTheme} />
         </Router>
       </AuthProvider>
     </div>

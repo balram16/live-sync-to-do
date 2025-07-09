@@ -36,6 +36,7 @@ export const AuthProvider = ({ children }) => {
   }, [token]);
 
   const login = (token, user) => {
+    console.log('AuthContext login called with token:', token ? 'present' : 'missing', 'user:', user);
     setToken(token);
     setUser(user || null);
   };
