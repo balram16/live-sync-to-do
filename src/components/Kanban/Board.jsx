@@ -19,7 +19,7 @@ const columnDefs = [
   { id: 'done', name: 'Done', status: 'Done' },
 ];
 
-const SOCKET_URL = '${import.meta.env.VITE_API_URL}';
+const SOCKET_URL = import.meta.env.VITE_API_URL;
 
 const Board = ({ theme, toggleTheme }) => {
   const { logout, token, user } = useAuth();
@@ -133,7 +133,7 @@ const Board = ({ theme, toggleTheme }) => {
     setError('');
     try {
       const col = columns.find(c => c.id === colId);
-      const res = await fetch('${import.meta.env.VITE_API_URL}/api/tasks', {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/tasks`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -417,7 +417,7 @@ const Board = ({ theme, toggleTheme }) => {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const res = await fetch('${import.meta.env.VITE_API_URL}/api/auth/users', {
+        const res = await fetch(`${import.meta.env.VITE_API_URL}/api/auth/users`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         const data = await res.json();
@@ -433,7 +433,7 @@ const Board = ({ theme, toggleTheme }) => {
       setLoading(true);
       setError('');
       try {
-        const res = await fetch('${import.meta.env.VITE_API_URL}/api/tasks', {
+        const res = await fetch(`${import.meta.env.VITE_API_URL}/api/tasks`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         const data = await res.json();
@@ -633,7 +633,7 @@ const Board = ({ theme, toggleTheme }) => {
             }
           }
           // After drag ends, re-fetch tasks to re-sync
-          const res = await fetch('${import.meta.env.VITE_API_URL}/api/tasks', {
+          const res = await fetch(`${import.meta.env.VITE_API_URL}/api/tasks`, {
             headers: { Authorization: `Bearer ${token}` },
           });
           const data = await res.json();
